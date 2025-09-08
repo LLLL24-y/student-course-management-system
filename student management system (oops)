@@ -1,0 +1,29 @@
+class Student:
+    def __init__(self,name,roll_no,marks):
+        self.name=name
+        self.roll_no=roll_no
+        self.marks=marks
+    def add_mark(self,subject, score):
+        self.subject=subject
+        self.score=score
+        self.marks[subject]=score
+    def update_mark(self,subject, score):
+        self.subject=subject
+        self.score=score
+        self.marks[subject]=score
+    def calculate_average(self):
+        if len(self.marks) == 0:   # no subjects added yet
+            return 0
+        total = sum(self.marks.values())
+        count = len(self.marks)
+        return total / count
+    def display_details(self):
+        return f"name :{self.name}, roll_no :{self.roll_no}, average :{self.calculate_average():.2f},subject and score :{self.marks}"
+st1=Student("Zara",10,marks={"Math": 85, "Science": 90})
+st2=Student("tom",11,marks={"Math": 45, "Science": 89})
+st3=Student("smith",12,marks={"Math": 75, "Science": 84})
+st1.add_mark("english",70)
+st3.update_mark("Math",68)
+print(st1.display_details())
+print(st2.display_details())
+print(st3.display_details())
