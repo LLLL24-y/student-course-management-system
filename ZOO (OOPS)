@@ -1,0 +1,85 @@
+class Animal:
+    def __init__(self,name,species,age):
+        self.name=name
+        self.species=species
+        self.__age=age
+    def make_sound(self):
+        return "Some generic sound"
+    def get_info(self):
+        return f"NAME:{self.name},SPECIES:{self.species},AGE:{self.__age}"
+class Lion(Animal):
+    def make_sound(self):
+        return "roar"
+class Elephant(Animal):
+    def make_sound(self):
+        return "roar"
+class Parrot(Animal):
+    def make_sound(self):
+        return "talks"
+    @property
+    def age(self):
+        return self.__age
+    @age.setter
+    def age(self,value):
+        if value >= 0:
+            self.__age=value
+        else:
+            print("not approved")
+class Employee:
+    def __init__(self,name):
+        self.name=name
+
+    def work(self):
+        pass
+class Zookeeper(Employee):
+    def work(self):
+        return f"{self.name} feeding the animals"
+class Veterinarian(Employee):
+    def work(self):
+        return f"{self.name} checking the animals health"
+    
+class Zoo:
+    def __init__(self):
+        self.animals=[]
+        self.employee=[]
+    def add_animal(self,animal):
+        self.animals.append(animal)
+    def add_employee(self,employee):
+        self.employee.append(employee)
+    def show_all_animals(self):
+        for animal in self.animals:
+            return f"{animal.get_info()}"
+    def show_all_employee(self):
+        for emp in self.employee:
+            print(f"{emp.__class__.__name__}: {emp.name}, Work: {emp.work()}")
+    def make_all_sounds(self):
+        for animal in self.animals:
+            print(f"{animal.name} makes sound: {animal.make_sound()}")
+
+
+a1 = Lion("Simba", "Lion", 5)
+a2 = Elephant("Dumbo", "Elephant", 10)
+a3 = Parrot("Polly", "Parrot", 2)
+a4 = Animal("Shere Khan", "Tiger", 7)  # okay if Tiger is not subclassed
+print(a1.get_info())
+print(a2.get_info())
+print(a3.get_info())
+print(a4.get_info())
+
+zoo = Zoo()
+
+zoo.add_employee(Zookeeper("Zara"))
+zoo.add_employee(Veterinarian("Roy"))
+
+zoo.show_all_employee()
+
+zoo.add_animal(a1)
+zoo.add_animal(a2)
+zoo.add_animal(a3)
+zoo.add_animal(a4)
+zoo.show_all_employee()
+zoo.show_all_animals()
+zoo.make_all_sounds()
+
+
+
