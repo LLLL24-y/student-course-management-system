@@ -1,0 +1,73 @@
+#Bank Management System using OOP
+class Account:
+    def __init__(self,account_number, holder_name, balance):
+        self.account_number=account_number
+        self.holder_name=holder_name
+        self.balance=balance
+    def deposit(self,amount):
+        self.balance+=amount
+        return f"the current balance after deposit is: {self.balance}"
+    def withdraw(self,amount):
+        if self.balance <= amount:
+            return "there is no enough balance"
+        else:
+            self.balance-=amount
+            return f"the current balance after withdraw is: {self.balance}"
+    def get_info(self):
+        return f"ACCT NO:{self.account_number},HOLDER NAME:{self.holder_name},BALANCE :{self.balance}"
+class SavingsAccount(Account):
+    def __init__(self, account_number, holder_name, balance, interest_rate):
+        super().__init__(account_number, holder_name, balance)
+        self.interest_rate = interest_rate
+
+    def add_interest(self):
+        interest = self.balance * self.interest_rate / 100
+        self.balance += interest
+        return f"Interest added: {interest}, New balance: {self.balance}"
+
+class CurrentAccount(Account):
+    def __init__(self, account_number, holder_name, balance, overdraft_limit):
+        super().__init__(account_number, holder_name, balance)
+        self.overdraft_limit = overdraft_limit
+    def withdraw(self,amount):
+        if self.balance - amount >= -self.overdraft_limit:
+            self.balance -= amount
+            return f"Withdrawal successful. Balance: {self.balance}"
+        else:
+            return "Overdraft limit exceeded"
+
+class Bank:
+    def __init__(self,name):
+        self.name=name
+        self.accounts=[]
+    def add_account(self,account):
+        self.accounts.append(account)
+        return f"the added account is {account.account_number}"
+    def find_account(self,account_number):
+        for acc in self.accounts:
+            if acc.account_number == account_number:
+                return acc
+        return None
+
+    def show_all_accounts(self):
+        return [acc.get_info() for acc in self.accounts]
+    
+
+acct1=Account(1001,"zara",3000)
+acct2=Account(1002,"tom",3100)
+print(acct1.deposit(300))
+print(acct1.withdraw(3200))
+print(acct1.get_info())
+print(acct2.get_info())
+save=SavingsAccount(2001,"alice",5000,5)
+print(save.add_interest())
+curr = CurrentAccount(3001, "Bob", 2000, 500)
+print(curr.withdraw(2200))   # within overdraft
+print(curr.withdraw(500)) 
+bank=Bank("uco")
+print(bank.add_account(acct1))
+print(bank.add_account(acct2))
+print(bank.add_account(save))
+print(bank.add_account(curr))
+
+print(bank.show_all_accounts())
