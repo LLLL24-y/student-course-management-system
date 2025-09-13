@@ -1,0 +1,91 @@
+#Design a Ride Sharing System (like Uber/Ola) using OOP principles.
+class Driver:
+    def __init__(self,driver_id, name, car_model, is_available):
+        self.__driver_id=driver_id
+        self.name=name
+        self.car_model=car_model
+        self.is_available=is_available
+    def update_availability(self,status:bool):
+        self.is_available=status
+        if status==True:
+            return "is available"
+        else:
+            return "is not available"
+class Passenger:
+    def __init__(self,passenger_id, name):
+        self.__passenger_id=passenger_id
+        self.name=name
+    def request_ride(self,start, destination):
+        return f"Passenger {self.name} requested a ride from {start} to {destination}"
+class Ride:
+    def __init__(self,ride_id, driver, passenger, start_location, end_location, fare):
+        self.ride_id=ride_id
+        self.driver=driver
+        self.passenger=passenger
+        self.start_location=start_location
+        self.end_location=end_location
+        self.fare=fare
+
+    def calculate_fare(self,distance):
+        self.fare=distance*10
+        return self.fare
+    def ride_summary(self):
+        return (f"Ride ID: {self.ride_id}, Driver: {self.driver.name}, "
+        f"Passenger: {self.passenger.name}, From: {self.start_location}, "
+        f"To: {self.end_location}, Fare: {self.fare}")
+class RideSharingApp:
+    def __init__(self,name):
+        self.name=name
+        self.drivers=[]
+        self.passengers=[]
+        self.rides=[]
+    def add_driver(self,driver):
+        self.driver=driver
+        self.drivers.append(driver)
+    def add_passenger(self,passenger):
+        self.passengers.append(passenger)
+    def book_ride(self,passenger, start, destination, distance):
+        available_driver = None
+        for d in self.drivers:
+            if d.is_available:
+                available_driver = d
+                break
+
+        if available_driver:
+            available_driver.update_availability(False)  # driver is now busy
+            ride = Ride(len(self.rides) + 1, available_driver, passenger, start, destination, distance)
+            self.rides.append(ride)
+            return ride
+        else:
+            return "No drivers available at the moment."
+
+    def show_all_rides(self):
+        return [ride.ride_summary() for ride in self.rides]
+
+driver1 = Driver(101, "Arjun", "Toyota Innova", True)
+driver2 = Driver(102, "Meera", "Honda City", False)
+driver3 = Driver(103, "Karthik", "Suzuki Swift", True)
+driver1.update_availability(True)
+driver2.update_availability(False)
+passenger1=Passenger(1,"zara")
+passenger2=Passenger(2,"smith")
+passenger1.request_ride("kochi","bombay")
+passenger2.request_ride("alappuzha","thripunuthura")
+ride=Ride(1099,driver1,passenger1,"kottayam","thiruvalla",150)
+ride.calculate_fare(100)
+print(ride.ride_summary())
+app=RideSharingApp("MyRide")
+app.add_driver(driver1)
+app.add_driver(driver2)
+app.add_driver(driver3)
+app.add_passenger(passenger1)
+app.add_passenger(passenger2)
+print(passenger1.request_ride("zara","ekm"))
+ride1 = app.book_ride(passenger1, "Kochi", "Bombay", 120)
+print(ride1.ride_summary() if isinstance(ride1, Ride) else ride1)
+
+print(passenger2.request_ride("Alappuzha", "Thripunithura"))
+ride2 = app.book_ride(passenger2, "Alappuzha", "Thripunithura", 80)
+print(ride2.ride_summary() if isinstance(ride2, Ride) else ride2)
+for r in app.show_all_rides():
+    print(r)
