@@ -1,0 +1,75 @@
+#Library Management System using OOP concepts.
+class Book:
+    def __init__(self,book_id, title, author, is_available):
+        self.book_id=book_id
+        self.title=title
+        self.author=author
+        self.is_available=is_available
+    def borrow_book(self):
+        self.is_available=False
+    def return_book(self):
+        self.is_available=True
+    def book_info(self):
+        return f"[{self.book_id},{self.author},{self.title},{self.is_available}]"
+class Member:
+    def __init__(self,member_id, name):
+        self.member_id=member_id
+        self.name=name
+        self.borrowed_books=[]
+    def borrow(self,book):
+        if book.is_available:
+            self.borrowed_books.append(book)
+            book.is_available = False
+            return f"{self.name} borrowed '{book.title}'"
+        else:
+            return f"'{book.title}' is not available"
+    def return_book(self,book):
+        if book in self.borrowed_books:
+            self.borrowed_books.remove(book)
+            book.is_available = True
+            return f"{self.name} returned '{book.title}'"
+        else:
+            return f"{self.name} has not borrowed '{book.title}'"
+    def member_info(self):
+        return f"[{self.member_id},{self.name}]"
+
+class Libaray:
+    def __init__(self,library_name):
+        self.library_name=library_name
+        self.books=[]
+        self.members=[]
+    def add_book(self,book):
+        self.books.append(book)
+        
+    def register_member(self,member):
+        self.members.append(member)
+        
+    def show_all_books(self):
+        return f"{self.books}"
+    def show_all_members(self):
+        return f"{self.members}"
+
+#book object
+book1 = Book("101", "The Alchemist", "Paulo Coelho",True)
+book2 = Book("102", "1984", "George Orwell",True)
+#member object
+member1 = Member("201", "Alice")
+member2 = Member("202", "Bob")
+
+
+
+print(member1.borrow(book1))
+print(member2.borrow(book2))
+print(member1.return_book(book1))
+print(book1.book_info())
+print(book2.book_info())
+print(member1.member_info())
+print(member2.member_info())
+
+library=Libaray("MyLibrary")
+library.add_book(book1)
+library.add_book(book2)
+library.register_member(member1)
+library.register_member(member2)
+library.show_all_books()
+library.show_all_members()
